@@ -27,16 +27,21 @@ Route::put('/books/{book}', [BookController::class, 'update'])->name('books.upda
 Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 
 
+
+
+
+
+
 Route::resource('books', BookController::class);
 Route::resource('categories', CategoryController::class);
 
 Route::view('/', 'home');
 
-Route::view('dashboard', 'user.dashboard')
+Route::get('dashboard',  [BookController::class, 'showUser'])
     ->middleware(['auth', 'verified' ,'normal'])
     ->name('dashboard');
 
-Route::view('admin', 'admin.dashboard')
+Route::get('admin', [BookController::class, 'show'])
     ->middleware(['auth','verified', 'admin'])
     ->name('admin');
 

@@ -18,23 +18,21 @@ $login = function () {
 
     Session::regenerate();
 
-    $userRole=Auth::user()->role;
+    $userRole = Auth::user()->role;
 
-    switch($userRole){
+    switch ($userRole) {
         case 1:
-        $this->redirectIntended(default: route('superadmin', absolute: false), navigate: true);
-        break;
+            $this->redirectIntended(default: route('superadmin', absolute: false), navigate: true);
+            break;
         case 2:
-        $this->redirectIntended(default: route('admin', absolute: false), navigate: true);
-        break;
+            $this->redirectIntended(default: route('admin', absolute: false), navigate: true);
+            break;
         case 3:
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-        break;
+            $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+            break;
         default:
             return redirect('/');
     }
-
-
 };
 
 ?>
@@ -42,6 +40,9 @@ $login = function () {
 <div>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
+
+    
+
 
     <form wire:submit="login">
         <!-- Email Address -->
@@ -56,9 +57,9 @@ $login = function () {
             <x-input-label for="password" :value="__('Password')" />
 
             <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+                type="password"
+                name="password"
+                required autocomplete="current-password" />
 
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>
@@ -72,7 +73,9 @@ $login = function () {
         </div>
 
         <div class="flex items-center justify-end mt-4">
-        
+            <a href="{{ route('register') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150 ms-3">
+                {{ __('Register') }}
+            </a>
 
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
