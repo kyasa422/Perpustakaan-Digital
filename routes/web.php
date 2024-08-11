@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 
-use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\UserDashboardController;
 
 
 
@@ -34,7 +32,7 @@ Route::resource('categories', CategoryController::class);
 
 Route::view('/', 'home');
 
-Route::view('dashboard', 'dashboard')
+Route::view('dashboard', 'user.dashboard')
     ->middleware(['auth', 'verified' ,'normal'])
     ->name('dashboard');
 

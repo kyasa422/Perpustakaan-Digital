@@ -14,8 +14,14 @@ class BookController extends Controller
     use AuthorizesRequests;
     public function index(Request $request)
     {
-        // $books = Book::where('user_id', Auth::id())->get();
-        // return view('books.index', compact('books'));
+        if (Auth::user()->role == 2) {
+            // Admin: view all books
+            $books = Book::all();
+        } else {
+            // Regular user: view only their own books
+            $books = Book::where('user_id', Auth::id())->get();
+        }
+
         $query = Book::where('user_id', Auth::id());
 
         // Filter berdasarkan kategori jika parameter ada
@@ -29,8 +35,13 @@ class BookController extends Controller
         return view('books.index', compact('books', 'categories'));
     }
 
+    //===================================================================================================
+
     public function create()
     {
+
+    
+
         $categories = Category::all();
         return view('books.create', compact('categories'));
     }
@@ -66,6 +77,10 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
+        if (Auth::user()->role != 2 && $book->user_id != Auth::id()) {
+            return redirect()->route('books.index');
+        }
+
         $this->authorize('update', $book);
         $categories = Category::all();
         return view('books.edit', compact('book', 'categories'));
@@ -74,6 +89,9 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $this->authorize('update', $book);
+        if (Auth::user()->role != 2 && $book->user_id != Auth::id()) {
+            return redirect()->route('books.index');
+        }
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -100,6 +118,10 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
+
+        if (Auth::user()->role != 2 && $book->user_id != Auth::id()) {
+            return redirect()->route('books.index');
+        }
         $this->authorize('delete', $book);
         $book->delete();
 
